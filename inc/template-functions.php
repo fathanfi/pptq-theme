@@ -126,12 +126,13 @@ function ncmazTheme_NavAccountDropdownProps_Data()
 		];
 	}
 
+	global $wp;
 	// MENU FOOTER: LOGOUT
 	$NavAccountDropdownProps->footData[] = [
 		'id'        =>    'menuFoot3',
 		'name'      =>    esc_html__('Logout', 'ncmaz'),
 		'icon'      =>     'las la-sign-out-alt text-xl leading-none',
-		'href'      =>     wp_logout_url(get_permalink())
+		'href'      =>     wp_logout_url(home_url($wp->request))
 	];
 	return $NavAccountDropdownProps;
 }

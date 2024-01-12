@@ -4,6 +4,11 @@ $enableSignUp = false;
 if (get_option('users_can_register')) {
     $enableSignUp =  true;
 }
+
+$enableRecaptcha = boolval($args['is_enable_recaptcha']);
+$recaptcha_site_key = $args['recaptcha_site_key'];
+$recaptcha_secret_key = $args['recaptcha_secret_key'];
+
 ?>
 
 <div class="fixed hidden inset-0 z-10 overflow-y-auto" data-ncmaz-modal-name="ncmaz-modal-form-forgot-password">
@@ -34,7 +39,7 @@ if (get_option('users_can_register')) {
 
                 <!-- FORM -->
                 <div class="p-0 space-y-6 text-sm">
-                    <form name="lostpasswordform" class="space-y-6" method="POST" action="<?php echo esc_url(wp_lostpassword_url(get_permalink())); ?>">
+                    <form id="ncmaz_forgotpasswordform_modal" name="lostpasswordform" class="space-y-6" method="POST" action="<?php echo esc_url(wp_lostpassword_url(get_permalink())); ?>">
                         <div class="ncmaz-input relative">
                             <div class="absolute left-1 top-1/2 transform -translate-y-1/2">
                                 <div class="text-[1.375rem] text-neutral-700 px-4 leading-none"><i class="las la-user"></i></div>
@@ -43,7 +48,7 @@ if (get_option('users_can_register')) {
                         </div>
                         <input type="hidden" name="redirect_to" value="">
 
-                        <button type="submit" name="wp-submit" class="ncmaz-button rounded-full h-14 w-full text-sm xl:text-base inline-flex items-center justify-center text-center py-2 px-4 md:px-6 bg-primary-6000 hover:bg-primary-700 text-neutral-50  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 font-medium">
+                        <button type="submit" name="wp-submit" class="ncmaz-button g-recaptcha rounded-full h-14 w-full text-sm xl:text-base inline-flex items-center justify-center text-center py-2 px-4 md:px-6 bg-primary-6000 hover:bg-primary-700 text-neutral-50  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 font-medium" data-sitekey="<?php echo esc_attr($enableRecaptcha ? $recaptcha_site_key : ""); ?>" data-callback='ncmaz_onSubmitForgotPasswordForm' data-action='submit'>
                             <?php echo esc_html__('Get new password', 'ncmaz'); ?>
                         </button>
 

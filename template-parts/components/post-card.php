@@ -28,7 +28,7 @@ is_sticky($postID)
     <!-- CATS -->
     <span class="<?php echo esc_attr(has_post_thumbnail($postID) ? "absolute top-3 inset-x-3" : "block p-4 pb-0"); ?>">
         <div class="nc-CategoryBadgeList flex flex-wrap" data-nc-id="CategoryBadgeList">
-            <?php echo get_the_category_list(null, null, $postID); ?>
+            <?php echo get_the_category_list('', '', $postID); ?>
         </div>
     </span>
 

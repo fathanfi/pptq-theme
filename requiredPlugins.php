@@ -6,8 +6,8 @@ if (!function_exists('ncmaz_theme_register_required_plugins')) :
 	function ncmaz_theme_register_required_plugins()
 	{
 		// 
-		$NcmazCoreVersion = '4.1.0';
-		$NcmazFrontendVersion = '4.1.3';
+		$NcmazCoreVersion = _NCMAZ_CORE_VERSION_REQUIRE;
+		$NcmazFrontendVersion = _NCMAZ_FRONTEND_VERSION_REQUIRE;
 		// 
 
 		$plugins = [
@@ -73,31 +73,16 @@ if (!function_exists('ncmaz_theme_register_required_plugins')) :
 				'required' 	=> true,
 				'version'	=> $NcmazFrontendVersion
 			],
-
-			// WPGraphQL Extensions
-			[
-				'name'     	=> 'Total Counts for WPGraphQL',
-				'slug'     	=> 'total-counts-for-wp-graphql',
-				'source'   	=> 'https://github.com/builtbycactus/total-counts-for-wp-graphql/archive/refs/heads/master.zip',
-				'required' 	=> true,
-			],
 			[
 				'name'     	=> 'WPGraphQL for Advanced Custom Fields',
 				'slug'     	=> 'wp-graphql-acf',
-				'source'   	=> 'https://github.com/wp-graphql/wp-graphql-acf/archive/refs/heads/develop.zip',
+				'source'   	=> 'https://github.com/wp-graphql/wp-graphql-acf/archive/master.zip',
 				'required' 	=> true,
+				'version'	=> '0.6.1'
 			],
 		];
 
-		/*
-	 * Array of configuration settings. Amend each line as needed.
-	 *
-	 * TGMPA will start providing localized text strings soon. If you already have translations of our standard
-	 * strings available, please help us make TGMPA even better by giving us access to these translations or by
-	 * sending in a pull-request with .po file(s) with the translations.
-	 *
-	 * Only uncomment the strings in the config array if you want to customize the strings.
-	 */
+
 		$config = [
 			'id'           => 'ncmaztgmpa',
 			'default_path' => '',
@@ -115,6 +100,62 @@ if (!function_exists('ncmaz_theme_register_required_plugins')) :
 	}
 	add_action('tgmpa_register', 'ncmaz_theme_register_required_plugins');
 endif;
+
+
+// 
+// NOTICES CHECK PLUGIN UPDATED NOT OK
+if (!function_exists('ncmazTheme_admin_notice_ncmaz_plugins_not_updated')) :
+	add_action('admin_notices', 'ncmazTheme_admin_notice_ncmaz_plugins_not_updated');
+	function ncmazTheme_admin_notice_ncmaz_plugins_not_updated()
+	{
+		if (!defined('_NCMAZ_CORE_VERSION') || !defined('_NCMAZ_CORE_VERSION_REQUIRE') || !defined('_NCMAZ_FRONTEND_VERSION_REQUIRE') || !defined('_NCMAZ_FRONTEND_VERSION')) {
+			return;
+		}
+		if (!function_exists('ncmazTheme_string_version_toInt')) {
+			return;
+		}
+
+		$ncmaz_frontend_version_int = ncmazTheme_string_version_toInt(_NCMAZ_FRONTEND_VERSION);
+		$ncmaz_frontend_require_version_int = ncmazTheme_string_version_toInt(_NCMAZ_FRONTEND_VERSION_REQUIRE);
+		$ncmaz_core_version_int = ncmazTheme_string_version_toInt(_NCMAZ_CORE_VERSION);
+		$ncmaz_core_require_version_int = ncmazTheme_string_version_toInt(_NCMAZ_CORE_VERSION_REQUIRE);
+
+		//  FOR SOME ORTHER
+		$ncmaz_other_version_init = !empty(WPGRAPHQL_VERSION) ? ncmazTheme_string_version_toInt(WPGRAPHQL_VERSION) : 0;
+		$ncmaz_other_require_version_int = ncmazTheme_string_version_toInt('1.13.5');
+		// 
+
+		$isNcmazFrontendOk = $ncmaz_frontend_version_int >= $ncmaz_frontend_require_version_int;
+		$isNcmazCoreOk =  $ncmaz_core_version_int >= $ncmaz_core_require_version_int;
+		$isNcmazOrtherOk = $ncmaz_other_version_init >= $ncmaz_other_require_version_int;
+
+		if ($isNcmazFrontendOk && $isNcmazCoreOk && $isNcmazOrtherOk) {
+			return;
+		}
+
+?>
+		<div class="notice notice-error is-dismissible">
+			<?php if (!$isNcmazFrontendOk || !$isNcmazCoreOk) : ?>
+				<p style="color: chocolate;">
+					<strong style="text-decoration: underline;">*Importance:</strong> You need to update <strong>ncmaz-core plugin</strong> & <strong>ncmaz-frontend plugin</strong> to work properly with this theme version. Otherwise, an unexpected error may occur.
+				</p>
+			<?php endif; ?>
+
+			<?php if (!$isNcmazOrtherOk) : ?>
+				<p style="color: chocolate;">
+					<strong style="text-decoration: underline;">*Importance:</strong> You need to update <strong style="text-decoration: underline ;">WP-graphql </strong> plugin to work properly with this theme version. Otherwise, an unexpected error may occur.
+				</p>
+			<?php endif; ?>
+
+
+			<p>
+				Navigate to <strong>Appearance -> Install Plugin -> Active/Update</strong> the <strong>required</strong> plugins.
+			</p>
+		</div>
+<?php
+	}
+endif;
+
 
 
 // DE-ACTIVE ncmaz-demo-importer PLUGIN FOR OLD CLIENTS

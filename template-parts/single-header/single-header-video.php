@@ -12,9 +12,14 @@
     <?php if (defined('_NCMAZ_FRONTEND_VERSION') && function_exists('get_field')) : ?>
         <div class="relative lg:w-8/12 flex-shrink-0">
             <?php
+            global $ncmaz_redux_demo;
             $HeaderSingleVideoProps = (object)[];
             $HeaderSingleVideoProps->videoUrl = get_field('video_url');
             $HeaderSingleVideoProps->featuredImage = get_the_post_thumbnail_url(get_the_ID(), 'full');
+            $HeaderSingleVideoProps->autoPlay = true;
+            if (isset($ncmaz_redux_demo['nc-single-page-settings--general-switch-video-autoPlay'])) {
+                $HeaderSingleVideoProps->autoPlay = boolval($ncmaz_redux_demo['nc-single-page-settings--general-switch-video-autoPlay']);
+            }
             ?>
             <div data-is-react-component="HeaderSingleVideo" data-component-props="<?php echo esc_attr(json_encode($HeaderSingleVideoProps)); ?>"></div>
         </div>

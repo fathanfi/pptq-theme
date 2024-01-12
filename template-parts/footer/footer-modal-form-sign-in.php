@@ -8,6 +8,11 @@ if (get_option('users_can_register')) {
 if (is_user_logged_in() || !$enableSignIn) {
     return '';
 }
+global $wp;
+$enableRecaptcha = boolval($args['is_enable_recaptcha']);
+$recaptcha_site_key = $args['recaptcha_site_key'];
+$recaptcha_secret_key = $args['recaptcha_secret_key'];
+
 ?>
 
 <div class="fixed hidden inset-0 z-max overflow-y-auto" data-ncmaz-modal-name="ncmaz-modal-form-sign-in">
@@ -37,7 +42,7 @@ if (is_user_logged_in() || !$enableSignIn) {
 
                 <div class="p-0 space-y-6">
                     <!-- CUSTOM LOGIN FORM -->
-                    <form class="space-y-6 text-sm" name="loginform" method="POST" action="<?php echo esc_url(wp_login_url(get_permalink())); ?>">
+                    <form class="space-y-6 text-sm" id="ncmaz_signinform_modal" name="loginform" method="POST" action="<?php echo esc_url(wp_login_url(home_url($wp->request))); ?>">
                         <div class="ncmaz-input relative">
                             <div class="absolute left-1 top-1/2 transform -translate-y-1/2">
                                 <div class="text-[1.375rem] text-neutral-700 px-4 leading-none"><i class="las la-user"></i></div>
@@ -61,11 +66,30 @@ if (is_user_logged_in() || !$enableSignIn) {
                             </button>
                         </div>
 
+                        <!-- IF ENABEL RECAPTCHA -->
+                        <?php if ($enableRecaptcha) : ?>
+                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                            <script>
+                                function ncmaz_onSubmitSignInForm(token) {
+                                    document.getElementById("ncmaz_signinform_modal").submit();
+                                }
+
+                                function ncmaz_onSubmitSignUpForm(token) {
+                                    document.getElementById("ncmaz_signupform_modal").submit();
+                                }
+
+                                function ncmaz_onSubmitForgotPasswordForm(token) {
+                                    document.getElementById("ncmaz_forgotpasswordform_modal").submit();
+                                }
+                            </script>
+                        <?php endif; ?>
+
+                        <input type="hidden" name="redirect_to" value="<?php echo esc_url(home_url($wp->request)); ?>">
+
                         <!-- SUBMIt -->
-                        <button type="submit" name="wp-submit" class="ncmaz-button rounded-full h-14 w-full text-sm xl:text-base inline-flex items-center justify-center text-center py-2 px-4 md:px-6 bg-primary-6000 hover:bg-primary-700 text-neutral-50  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 font-medium">
+                        <button type="submit" name="wp-submit" class="ncmaz-button g-recaptcha rounded-full h-14 w-full text-sm xl:text-base inline-flex items-center justify-center text-center py-2 px-4 md:px-6 bg-primary-6000 hover:bg-primary-700 text-neutral-50  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 font-medium" data-sitekey="<?php echo esc_attr($enableRecaptcha ? $recaptcha_site_key : ""); ?>" data-callback='ncmaz_onSubmitSignInForm' data-action='submit'>
                             <?php echo esc_html__('Sign in', 'ncmaz'); ?>
                         </button>
-                        <input type="hidden" name="redirect_to" value="<?php echo esc_url(get_permalink()); ?>">
                     </form>
 
                     <!-- CUSTOM LOGIN FORM END -->

@@ -1,5 +1,7 @@
 <?php
 $hasWidget = is_active_sidebar('footer-1-sidebar') || is_active_sidebar('footer-2-sidebar') || is_active_sidebar('footer-3-sidebar') || is_active_sidebar('footer-4-sidebar');
+global $ncmaz_redux_demo;
+
 ?>
 
 <!-- ADD UNIQUE ID WHEN ACTIVE WOOCOMMERCE -->
@@ -50,10 +52,18 @@ $hasWidget = is_active_sidebar('footer-1-sidebar') || is_active_sidebar('footer-
 <?php get_template_part('template-parts/header/mobile-nav'); ?>
 
 <!-- SIGNIN/SIGNUP MODAL -->
-<?php if (defined('_NCMAZ_FRONTEND_VERSION')) : ?>
-	<?php get_template_part('template-parts/footer/footer-modal-form-sign-up'); ?>
-	<?php get_template_part('template-parts/footer/footer-modal-form-sign-in'); ?>
-	<?php get_template_part('template-parts/footer/footer-modal-form-forgot-password'); ?>
+<?php if (defined('_NCMAZ_FRONTEND_VERSION') && !empty($ncmaz_redux_demo)) : ?>
+	<?php
+	$ncmazReCAPTCHA = [
+		'is_enable_recaptcha' => $ncmaz_redux_demo['nc-general-settings--recaptcha-login--enable-on-modal'],
+		'recaptcha_site_key' => $ncmaz_redux_demo['nc-general-settings--recaptcha-login--recaptcha_site_key'],
+		'recaptcha_secret_key' => $ncmaz_redux_demo['nc-general-settings--recaptcha-login-recaptcha_secret_key'],
+	];
+
+	get_template_part('template-parts/footer/footer-modal-form-sign-in', null, $ncmazReCAPTCHA);
+	get_template_part('template-parts/footer/footer-modal-form-sign-up', null, $ncmazReCAPTCHA);
+	get_template_part('template-parts/footer/footer-modal-form-forgot-password', null, $ncmazReCAPTCHA);
+	?>
 <?php endif; ?>
 
 <?php wp_footer(); ?>

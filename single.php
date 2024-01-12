@@ -1,7 +1,8 @@
 <?php
 get_header();
 global $ncmaz_redux_demo;
-$singlePageType = '2'; // 1 | 2 | 3
+$singlePageTypeOnThemeOptions = '2'; // 1 | 2 | 3 | 1_required | 2_required | 2_required
+$singlePageType = '2'; // 1 | 2 | 3 | by_theme_options
 $enableSidebar = is_active_sidebar('single-sidebar');
 
 $postFormat = get_post_format();
@@ -9,6 +10,7 @@ if (defined('_NCMAZ_FRONTEND_VERSION') && function_exists('get_field')) {
 	$singlePageType = get_field('single_page_style');
 	$enableSidebar = is_active_sidebar('single-sidebar') && get_field('show_right_sidebar');
 	if (!empty($ncmaz_redux_demo)) {
+		$singlePageTypeOnThemeOptions = $ncmaz_redux_demo['nc-single-page-settings--general-single-stype-opt'] ?? '2';
 		if ($ncmaz_redux_demo['nc-single-page-settings--general-single-widget-opt'] === 'enable') {
 			$enableSidebar = is_active_sidebar('single-sidebar');
 		}
@@ -17,6 +19,23 @@ if (defined('_NCMAZ_FRONTEND_VERSION') && function_exists('get_field')) {
 		}
 	}
 }
+
+
+// 
+// 
+if ($singlePageType == "by_theme_options") {
+	$singlePageType = $singlePageTypeOnThemeOptions;
+}
+
+if ($singlePageTypeOnThemeOptions == "1_required") {
+	$singlePageType = '1';
+} elseif ($singlePageTypeOnThemeOptions == "2_required") {
+	$singlePageType = '2';
+} elseif ($singlePageTypeOnThemeOptions == "3_required") {
+	$singlePageType = '3';
+}
+// 
+// 
 
 $mainClasses = "pt-8 lg:pt-14 ";
 if ($postFormat === 'video') {

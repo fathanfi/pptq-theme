@@ -67,6 +67,7 @@ $countViewIsOK = function_exists('get_field') && function_exists('ncmazFe_checkE
             $PostMoreActionDropdown_data->hasComment = boolval(comments_open());
             $PostMoreActionDropdown_data->postDataBaseId = $post->ID;
             $PostMoreActionDropdown_data->isReloadAfterDelete = true;
+            $PostMoreActionDropdown_data->singlePostStatus = get_post_status();
 
             ?>
             <div data-is-react-component="PostMoreActionDropdown" data-component-props="<?php echo esc_attr(json_encode($PostMoreActionDropdown_data)); ?>"></div>

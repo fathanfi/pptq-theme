@@ -1,8 +1,15 @@
 <?php
 
 if (!defined('_NCMAZ_THEME_VERSION')) {
-	define('_NCMAZ_THEME_VERSION', '4.1.3');
+	define('_NCMAZ_THEME_VERSION', '4.3.2');
 }
+if (!defined('_NCMAZ_CORE_VERSION_REQUIRE')) {
+	define('_NCMAZ_CORE_VERSION_REQUIRE', '4.1.1');
+}
+if (!defined('_NCMAZ_FRONTEND_VERSION_REQUIRE')) {
+	define('_NCMAZ_FRONTEND_VERSION_REQUIRE', '4.3.1');
+}
+
 define('_NCMAZ_THEME_DIR_PATH', get_template_directory(__FILE__));
 
 // 
@@ -26,6 +33,15 @@ function ncmaz_var_export($value)
 	echo ('-----------end--ncmaz_varexport-----------------');
 	echo '</code></pre>';
 };
+// 
+if (!function_exists("ncmaz__is_enabled")) :
+	function ncmaz__is_enabled($variable)
+	{
+		if (!isset($variable)) return null;
+		return filter_var($variable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+	}
+endif;
+
 //
 // 
 function ncmazTheme_string_version_toInt(string $version)

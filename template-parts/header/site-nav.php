@@ -58,11 +58,12 @@ class WPDocs_Walker_Nav_Menu extends Walker_Nav_Menu
 		// USE GRAPHQL get data megamenu for menu-item
 		// DEMO DEFAULT VALUE
 		$graphql = [
-			'data'	=> null
+			'data'	=> ""
 		];
+
 		if ($is_mega_menu === 'true' && function_exists('graphql')) {
 			$graphql = graphql([
-				'query' => ' {
+				'query' => '{
 					menuItem(id: ' . $item->ID . ', idType: DATABASE_ID) {
 						id
 						label
@@ -84,8 +85,11 @@ class WPDocs_Walker_Nav_Menu extends Walker_Nav_Menu
 				}'
 			]);
 		}
+		$graphqlData = empty($graphql['data']) ? 0 : $graphql['data'];
+		$is_mega_menu = empty($graphql['data']) ? "false" : $is_mega_menu;
+
 		// Build HTML.
-		$output .= $indent . '<li data-graphql="' . htmlspecialchars(json_encode($graphql['data']), ENT_QUOTES, 'UTF-8') . '"  data-item-id="' . $item->ID . '"  data-is-megamenu="' . $is_mega_menu . '"  class="' . $depth_class_names . ' ' . $class_names . '">';
+		$output .= $indent . '<li data-graphql="' . htmlspecialchars(json_encode($graphqlData), ENT_QUOTES, 'UTF-8') . '"  data-item-id="' . $item->ID . '"  data-is-megamenu="' . $is_mega_menu . '"  class="' . $depth_class_names . ' ' . $class_names . '">';
 
 		// Link attributes.
 		$attributes  = !empty($item->attr_title) ? ' title="'  . esc_attr($item->attr_title) . '"' : '';
