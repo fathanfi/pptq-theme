@@ -5,9 +5,9 @@ if (get_option('users_can_register')) {
     $enableSignUp =  true;
 }
 
-$enableRecaptcha = boolval($args['is_enable_recaptcha']);
-$recaptcha_site_key = $args['recaptcha_site_key'];
-$recaptcha_secret_key = $args['recaptcha_secret_key'];
+$enableRecaptcha = isset( $args['is_enable_recaptcha'] ) ? boolval($args['is_enable_recaptcha']) : false;
+$recaptcha_site_key = isset( $args['recaptcha_site_key'] ) ? $args['recaptcha_site_key'] : '';
+$recaptcha_secret_key = isset( $args['recaptcha_secret_key'] ) ? $args['recaptcha_secret_key'] : '';
 
 ?>
 

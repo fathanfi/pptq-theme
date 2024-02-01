@@ -1192,9 +1192,6 @@ select {
 .grid {
   display: grid !important;
 }
-.hidden {
-  display: none !important;
-}
 .h-11 {
   height: 2.75rem !important;
 }
